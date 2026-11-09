@@ -17,8 +17,8 @@ const rooms = new Map();
 const queue = [];
 const labels = ['방어권', '행운의 지갑', '응급 키트'];
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const publicRoom = (r) => ({ id:r.id, phase:r.phase, players:r.players.map(({id,name,hp,coins,alive,shield})=>({id,name,hp,coins,alive,shield,isHost:id===r.players[0]?.id})), turn:r.turn, turnId:r.players[r.turn]?.id, log:r.log.slice(-12), deadline:r.deadline, winner:r.winner });
-function emitRoom(r) { io.to(r.id).emit('room', publicRoom(r)); }
+const publicRoom = (r, viewerId) => ({ id:r.id, phase:r.phase, players:r.players.map(({id,name,hp,coins,alive,shield,hand})=>({id,name,hp,coins,alive,shield,hand:id===viewerId?hand:[],isHost:id===r.players[0]?.id})), turn:r.turn, turnId:r.players[r.turn]?.id, log:r.log.slice(-12), deadline:r.deadline, winner:r.winner });
+function emitRoom(r) { for (const p of r.players) io.to(p.id).emit('room', publicRoom(r, p.id)); }
 function createRoom() { return { id: Math.random().toString(36).slice(2,8).toUpperCase(), phase:'waiting', players:[], turn:0, log:[], deadline:Date.now()+30000, timer:null, winner:null }; }
 function start(r) { if (r.phase !== 'waiting' || r.players.length < 2) return; clearTimeout(r.timer); r.phase='playing'; r.deadline=null; r.log.push('게임 시작! 순서대로 카드를 뽑고 룰렛을 돌리세요.'); emitRoom(r); }
 function schedule(r) { r.timer=setTimeout(()=>start(r),30000); }
