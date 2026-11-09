@@ -1,0 +1,9 @@
+{
+  "name": "roulette-club",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "concurrently -k \"vite --host 0.0.0.0\" \"node server/index.js\"", "build": "vite build", "start": "node server/index.js" },
+  "dependencies": { "@vitejs/plugin-react": "latest", "concurrently": "latest", "express": "latest", "lucide-react": "^0.468.0", "react": "latest", "react-dom": "latest", "socket.io": "latest", "socket.io-client": "latest", "vite": "latest" },
+  "devDependencies": {}
+}
