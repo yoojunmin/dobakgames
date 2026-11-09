@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.get('/health', (_req, res) => res.json({ ok: true }));
 app.use(express.static(path.join(__dirname, '../dist')));
-app.get('*', (_req, res) => res.sendFile(path.join(__dirname, '../dist/index.html')));
+app.use((_req, res) => res.sendFile(path.join(__dirname, '../dist/index.html')));
 
 const rooms = new Map();
 const queue = [];
